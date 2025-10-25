@@ -212,8 +212,8 @@ jobs:
       with:
         version: 6.9.3
         arch: linux_gcc_64
-        modules: 'qtmultimedia qtwaylandcompositor'
-        archives: 'qtwayland qttools qtbase'
+        modules: 'qtmultimedia'
+        archives: 'qttools qtbase'
         setup-python: false
         cache: true
 

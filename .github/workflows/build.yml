@@ -212,7 +212,7 @@ jobs:
       with:
         version: 6.9.3
         arch: linux_gcc_64
-        modules: 'qtmultimedia'
+        modules: 'qtmultimedia qtwaylandcompositor'
         tools: 'tools_generic'
         setup-python: false
         cache: true

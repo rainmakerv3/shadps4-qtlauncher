@@ -210,11 +210,10 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
       with:
-        version: 6.10.0
+        version: 6.9.3
         arch: linux_gcc_64
-        modules: 'qtmultimedia'
-        archives: 'qttools'
-        tools: 'tools_generic'
+        modules: 'qtmultimedia qtwaylandcompositor'
+        archives: 'qtwayland qttools qtbase'
         setup-python: false
         cache: true
 

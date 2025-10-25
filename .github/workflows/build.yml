@@ -214,6 +214,7 @@ jobs:
         arch: linux_gcc_64
         modules: "qtmultimedia"
         archives: 'qtwayland'
+        tools: 'tools_generic'
         setup-python: false
         cache: true
 

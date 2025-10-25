@@ -212,8 +212,8 @@ jobs:
       with:
         version: 6.10.0
         arch: linux_gcc_64
-        modules: "qtmultimedia"
-        archives: 'qtbase'
+        modules: 'qtmultimedia'
+        archives: 'qttools'
         tools: 'tools_generic'
         setup-python: false
         cache: true

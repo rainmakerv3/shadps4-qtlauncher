@@ -213,7 +213,7 @@ jobs:
         version: 6.10.0
         arch: linux_gcc_64
         modules: "qtmultimedia"
-        archives: 'qtwayland'
+        archives: 'qtbase'
         tools: 'tools_generic'
         setup-python: false
         cache: true

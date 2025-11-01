@@ -133,4 +133,6 @@ void PathToQString(QString& result, const std::filesystem::path& path);
                                                                 const std::string& game_id,
                                                                 int max_depth);
 
+std::filesystem::path GetLauncherDir();
+
 } // namespace Common::FS

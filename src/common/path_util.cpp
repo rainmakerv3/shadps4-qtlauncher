@@ -3,8 +3,10 @@
 
 #include <fstream>
 #include <unordered_map>
+#include <QMessageBox>
 #include "common/logging/log.h"
 #include "common/path_util.h"
+#include "qt_gui/gui_settings.h"
 
 #ifdef __APPLE__
 #include <CoreFoundation/CFBundle.h>
@@ -88,8 +90,13 @@ static auto UserPaths = [] {
     }
 #endif
 
-    // Try the portable launcher directory first.
-    auto user_dir = std::filesystem::current_path() / PORTABLE_DIR;
+    // Try the portable user directory first.
+    gui_settings settings{};
+    std::filesystem::path exePath =
+        settings.GetValue(gui::vm_versionSelected).toString().toStdString();
+
+    // Try the portable user directory first.
+    auto user_dir = exePath.parent_path() / PORTABLE_DIR;
     if (!std::filesystem::exists(user_dir)) {
         // If it doesn't exist, use the standard path for the platform instead.
         // NOTE: On Windows we currently just create the portable directory instead.
@@ -110,28 +117,8 @@ static auto UserPaths = [] {
 #endif
     }
 
-    // Try the portable user directory first.
-    auto launcher_dir = std::filesystem::current_path() / PORTABLE_LAUNCHER_DIR;
-    if (!std::filesystem::exists(launcher_dir)) {
-        // If it doesn't exist, use the standard path for the platform instead.
-        // NOTE: On Windows we currently just create the portable directory instead.
-#ifdef __APPLE__
-        launcher_dir = std::filesystem::path(getenv("HOME")) / "Library" / "Application Support" /
-                       "shadPS4QtLauncher";
-#elif defined(__linux__)
-        const char* xdg_data_home = getenv("XDG_DATA_HOME");
-        if (xdg_data_home != nullptr && strlen(xdg_data_home) > 0) {
-            launcher_dir = std::filesystem::path(xdg_data_home) / "shadPS4QtLauncher";
-        } else {
-            launcher_dir =
-                std::filesystem::path(getenv("HOME")) / ".local" / "share" / "shadPS4QtLauncher";
-        }
-#elif _WIN32
-        TCHAR appdata[MAX_PATH] = {0};
-        SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, 0, appdata);
-        launcher_dir = std::filesystem::path(appdata) / "shadPS4QtLauncher";
-#endif
-    }
+    // Try the portable launcher directory first.
+    auto launcher_dir = GetLauncherDir();
 
     std::unordered_map<PathType, fs::path> paths;
 
@@ -186,6 +173,31 @@ static auto UserPaths = [] {
 
     return paths;
 }();
+
+std::filesystem::path GetLauncherDir() {
+    auto launcher_dir = std::filesystem::current_path() / Common::FS::PORTABLE_LAUNCHER_DIR;
+    if (!std::filesystem::exists(launcher_dir)) {
+        // If it doesn't exist, use the standard path for the platform instead.
+        // NOTE: On Windows we currently just create the portable directory instead.
+#ifdef __APPLE__
+        launcher_dir = std::filesystem::path(getenv("HOME")) / "Library" / "Application Support" /
+                       "shadPS4QtLauncher";
+#elif defined(__linux__)
+        const char* xdg_data_home = getenv("XDG_DATA_HOME");
+        if (xdg_data_home != nullptr && strlen(xdg_data_home) > 0) {
+            launcher_dir = std::filesystem::path(xdg_data_home) / "shadPS4QtLauncher";
+        } else {
+            launcher_dir =
+                std::filesystem::path(getenv("HOME")) / ".local" / "share" / "shadPS4QtLauncher";
+        }
+#elif _WIN32
+        TCHAR appdata[MAX_PATH] = {0};
+        SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, 0, appdata);
+        launcher_dir = std::filesystem::path(appdata) / "shadPS4QtLauncher";
+#endif
+    }
+    return launcher_dir;
+}
 
 bool ValidatePath(const fs::path& path) {
     if (path.empty()) {

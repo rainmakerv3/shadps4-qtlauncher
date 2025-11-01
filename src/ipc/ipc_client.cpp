@@ -32,7 +32,7 @@ void IpcClient::startEmulator(const QFileInfo& exe, const QStringList& args, con
     }
     process->setProcessEnvironment(env);
 
-    process->setWorkingDirectory(workDir.isEmpty() ? exe.absolutePath() : workDir);
+    process->setWorkingDirectory(exe.absolutePath());
     process->start(exe.absoluteFilePath(), args, QIODevice::ReadWrite);
 }
 

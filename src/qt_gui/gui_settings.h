@@ -17,8 +17,8 @@ const QString favorites = "favorites";
 const QString version_manager = "version_manager";
 
 // general
-const gui_value gen_checkForUpdates = gui_value(general_settings, "checkForUpdates", false);
-const gui_value gen_showChangeLog = gui_value(general_settings, "showChangeLog", false);
+const gui_value gen_checkForUpdates = gui_value(general_settings, "checkForUpdates", true);
+const gui_value gen_showChangeLog = gui_value(general_settings, "showChangeLog", true);
 const gui_value gen_recentFiles =
     gui_value(main_window, "recentFiles", QVariant::fromValue(QList<QString>()));
 const gui_value gen_guiLanguage = gui_value(general_settings, "guiLanguage", "en_US");
